@@ -8,7 +8,7 @@ import useSWR from "swr";
 
 const URL = "https://api.wheretheiss.at/v1/satellites/25544";
 
-//2.Add the error Handling
+//2.Add the error Handling and the fetch
 const fetcher = async (URL) => {
   const res = await fetch(URL);
   // If the status code is not in the range 200-299,
@@ -27,7 +27,7 @@ const fetcher = async (URL) => {
 //3.- add the function: const fetcher = (...args) => fetch(...args).then((res) => res.json())
 //change the name to avoid the problem with the fetcher above ;
 
-const myfetcher = (...args) => fetch(...args).then((res) => res.json());
+// const myfetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function ISSTracker() {
   //4. add swr desconstructing
