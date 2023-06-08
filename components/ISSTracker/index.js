@@ -2,15 +2,13 @@ import { useEffect, useState } from "react";
 import Controls from "../Controls/index";
 import Map from "../Map/index";
 
-//3. import SWR (swr allready intalled- install with npm i swr)
+//1. import SWR (swr allready intalled- install with npm i swr)
 
-import { useSWR } from "swr";
+import useSWR from "swr";
 
 const URL = "https://api.wheretheiss.at/v1/satellites/25544";
 
-//4. add the function: const fetcher = (...args) => fetch(...args).then((res) => res.json());
-// const fetcher = (...args) => fetch(...args).then((res) => res.json())
-
+//2.Add the error Handling
 const fetcher = async (URL) => {
   const res = await fetch(URL);
   // If the status code is not in the range 200-299,
@@ -26,21 +24,28 @@ const fetcher = async (URL) => {
   return res.json();
 };
 
+//3.- add the function: const fetcher = (...args) => fetch(...args).then((res) => res.json())
+//change the name to avoid the problem with the fetcher above ;
+
+const myfetcher = (...args) => fetch(...args).then((res) => res.json());
+
 export default function ISSTracker() {
-  // const [coordsState, setCoordsState] = useState({
-  //   longitude: 0,
-  //   latitude: 0,
-  // });
+  //4. add swr desconstructing
+  const {
+    data,
+    error,
+    isLoading,
+    mutate,
+    // 5.-use the URL, the fetcher and the interval for the button
+  } = useSWR(URL, fetcher, { refreshInterval: 5000 });
 
-  //5.- useSWR
-
-  const { data, isLoading, mutate } = useSWR(URL, fetcher);
+  //6. handling the error messages
 
   if (error) return <div>failed to load</div>;
 
   if (isLoading) return <div>loading...</div>;
 
-  //2.- Comment the old version
+  //- Comment the old version
   // async function getISSCoords() {
   //   try {
   //     const response = await fetch(URL);
@@ -63,8 +68,9 @@ export default function ISSTracker() {
   //   };
   // }, []);
 
+  // console.log(coords);
+
   return (
-    // <SWRConfig value={{ fetcher, refreshInterval: 5000 }}>
     <main>
       <Map longitude={data.longitude} latitude={data.latitude} />
       <Controls
@@ -73,6 +79,5 @@ export default function ISSTracker() {
         onReload={() => handleReload(mutate())}
       />
     </main>
-    // </SWRConfig>
   );
 }
