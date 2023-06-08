@@ -4,7 +4,7 @@ import Map from "../Map/index";
 
 //3. import SWR (swr allready intalled- install with npm i swr)
 
-import { useSWR } from "swr";c
+import { useSWR } from "swr";
 
 const URL = "https://api.wheretheiss.at/v1/satellites/25544";
 
